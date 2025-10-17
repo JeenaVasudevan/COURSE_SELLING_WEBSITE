@@ -1,16 +1,12 @@
 import express from "express"
-import { create } from "../controllers/userController.js"
+import { create, login, userProfile } from "../controllers/userController.js"
 const router =express.Router()
 router.post("/signup",create)
-router.post("/login",(req,res,next)=>{
-
-})
+router.post("/login",login)
 router.put("/profile-update",(req,res,next)=>{
 
 })
-router.get("/profile",(req,res,next)=>{
-
-})
+router.get("/profile/:id",userProfile)
 router.delete("/profile",(req,res,next)=>{
 
 })
