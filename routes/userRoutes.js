@@ -1,18 +1,13 @@
 import express from "express"
-import { create, login, userProfile } from "../controllers/userController.js"
+import { login,userDelete,userLogout, userProfile, userSignup } from "../controllers/userController.js"
+import { authUser } from "../middleware/authUser.js"
 const router =express.Router()
-router.post("/signup",create)
+router.post("/signup",userSignup)
 router.post("/login",login)
-router.put("/profile-update",(req,res,next)=>{
-
-})
-router.get("/profile/:id",userProfile)
-router.delete("/profile",(req,res,next)=>{
-
-})
-router.post("/logout",(req,res,next)=>{
-
-})
+router.put("/profile-update",authUser,)
+router.get("/profile/:id",authUser,userProfile)
+router.delete("/delete/:id",authUser,userDelete)
+router.post("/logout",userLogout)
 router.get("/check-user",(req,res,next)=>{
 
 })

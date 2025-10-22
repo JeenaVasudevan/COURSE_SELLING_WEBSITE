@@ -2,7 +2,7 @@ import { User } from "../models/userModel.js";
 import bcrypt from "bcrypt"
 import { generateToken } from "../utilities/token.js";
 
-export const create = async (req, res, next) => {
+export const userSignup = async (req, res, next) => {
   try {
     const { name, email, password, mobile, profilePic } = req.body;
     if (!name || !email || !password || !mobile) {
@@ -30,7 +30,6 @@ export const create = async (req, res, next) => {
       .json({ error: error.message || "Internal server error" });
   }
 };
-
 export const login=async(req,res,next)=>{
   try{
      const{email,password}=req.body
@@ -57,11 +56,10 @@ export const login=async(req,res,next)=>{
     
   }
 }
-
 export const userProfile=async(req,res,next)=>{
   try{
-    const {id}=req.params
-    const userData=await User.findById(id).select('-password')
+    const {user}=req
+    const userData=await User.findById(user.id).select('-password')
     res.json({success:true,message:"User profile fetched",userData})
   }
    catch(error){
@@ -70,5 +68,33 @@ export const userProfile=async(req,res,next)=>{
       .status(error.status || 500)
       .json({ error: error.message || "Internal server error" });
     
+  }
+}
+export const userLogout=async(req,res,next)=>{
+  try{
+    res.clearCookie('token')
+     res.json({success:true,message:"User logged out"})
+  }
+  catch(error){
+    console.log(error);
+    res.status(error.statusCode||500).json(error.message)||'Internal Server Error'
+  }
+}
+export const userDelete=async(req,res,next)=>{
+  try{
+    const {user}=req;
+  if(!user || !user.id){
+    return res.status(401).json({message:'User is unauthorized'})
+  }
+  const deletedUser=await User.findByIdAndDelete(user.id)
+  if(!deletedUser){
+    return res.status(404).json({message:'User not found'})
+  }
+  res.clearCookie("token");
+  res.status(200).json({success:true,message: "User account deleted successfully"})
+  }
+  catch(error){
+    console.error(error);
+    res.status(error.status||500).json({error:error.message||"Internal Server Error"})
   }
 }

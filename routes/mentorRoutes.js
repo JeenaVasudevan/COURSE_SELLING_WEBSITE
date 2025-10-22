@@ -1,11 +1,8 @@
 import express from "express"
+import { mentorLogin, mentorSignup } from "../controllers/mentorController.js"
 const router =express.Router()
-router.post("/sign-up",(req,res,next)=>{
-
-})
-router.post("/login",(req,res,next)=>{
-
-})
+router.post("/signup",mentorSignup)
+router.post("/login",mentorLogin)
 router.put("/profile-update",(req,res,next)=>{
 
 })
